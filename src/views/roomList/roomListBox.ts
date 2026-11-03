@@ -58,7 +58,7 @@ const anchorLot = (_anchorLot?: TAnchorLot) => {
     ]),
     h("div", { class: "lottery-row vertically-center" }, [
       h("span", { class: "lottery-min text-ellipsis" }, `${formatJoinTotal(_anchorLot.join_total)}人参与`),
-      h("span", { class: "lottery-right" }, `${_anchorLot.showTime}[${_anchorLot.showEndTime}]`)
+      h("span", { class: "lottery-right" }, `${_anchorLot.showTime}[${_anchorLot.showEndTime}]`),
     ])
   ]);
 };

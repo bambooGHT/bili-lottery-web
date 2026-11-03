@@ -12,7 +12,7 @@
   @media (max-width: 483px) {
     height: auto;
     max-height: 278px;
-  contain-intrinsic-size: auto 278px;
+    contain-intrinsic-size: auto 278px;
   }
 }
 
@@ -121,6 +121,7 @@
     margin-left: auto;
     font-weight: 650;
     flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
     &:nth-child(2) {
       font-size: 12px;
     }

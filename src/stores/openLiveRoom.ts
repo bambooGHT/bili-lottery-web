@@ -11,7 +11,7 @@ const openLiveRoomManagerStore = () => {
 
   const openedRoomIds = ref(new Set<number>());
 
-  const addOpenLiveRoom = (roomId: number, redPocketList?: TRedPocket[], anchorLot?: TAnchorLot) => {
+  const autoOpenLiveRoom = (roomId: number, redPocketList?: TRedPocket[], anchorLot?: TAnchorLot) => {
     if (!addRoom(roomId, redPocketList, anchorLot)) return;
     openLiveRoom(roomId);
   };
@@ -66,7 +66,7 @@ const openLiveRoomManagerStore = () => {
 
   return {
     openedRoomIds,
-    addOpenLiveRoom,
+    autoOpenLiveRoom,
     navigateOpenLiveRoom
   };
 };

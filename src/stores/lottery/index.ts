@@ -157,7 +157,7 @@ const lotteryStore = () => {
         if (options.autoOpenLiveRoom && (mR || mA)) {
           const vR = mR ? redPocketList : undefined;
           const vA = mA ? lot.anchorLot : undefined;
-          openLiveRoomManager.addOpenLiveRoom(lot.room_id, vR, vA);
+          openLiveRoomManager.autoOpenLiveRoom(lot.room_id, vR, vA);
         }
       });
     });

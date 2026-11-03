@@ -7,6 +7,8 @@ import "./views/icon/icon.scss";
 import "./views/header/headerBox.scss";
 import "./views/roomList/roomListBox.scss";
 
+import 'tdesign-vue-next/es/style/index.css';
+
 const app = createApp({
   setup() {
     return () => h(ViewBox);
