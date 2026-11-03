@@ -22,7 +22,8 @@ const openLiveRoomManagerStore = () => {
   };
 
   const openLiveRoom = (roomId: number) => {
-    window.open(`https://live.bilibili.com/${roomId}`, "_blank");
+    if (isMobile()) window.open(`bilibili://live/${roomId}`, "_blank");
+    else window.open(`https://live.bilibili.com/${roomId}`, "_blank");
   };
 
   const deleteExpiredLiveRoom = (now: number) => {
@@ -60,6 +61,11 @@ const openLiveRoomManagerStore = () => {
     openedRoomIds.value.add(roomId);
 
     return true;
+  };
+
+  const isMobile = () => {
+    return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   };
 
   globalTicker.subscribe(deleteExpiredLiveRoom);
