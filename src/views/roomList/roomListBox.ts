@@ -1,10 +1,10 @@
 import { h } from "vue";
 import { CopyBtn } from "../icon";
 import type { TAnchorLot, TLotteryInfo, TRedPocket } from "@/types";
-import { areaList, giftList, JoinRequirementMap, redPocketType } from "@/stores/lottery/data";
+import { areaList, giftList, joinRequirementMap, redPocketType } from "@/stores/lottery/data";
 import { EReceiveType, ERedPocketType } from "@/stores/lottery/enums";
-import { getAnchorJoinCondition, getRedPocketStyle } from "./roomList";
-import { copyLottery, formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, openLiveRoomManager } from "@/stores";
+import { copyBtn, getAnchorJoinCondition, getRedPocketStyle } from "./roomList";
+import { formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, openLiveRoomManager } from "@/stores";
 
 export const roomListBox = () => {
   const { displayLotteryArray } = useLotteryStore();
@@ -36,7 +36,7 @@ const roomHeader = (item: TLotteryInfo) => {
       class: "anchor-name text-ellipsis",
       onClick: () => navigateOpenLiveRoom(item.room_id, item.redPocketList, item.anchorLot)
     }, item.name),
-    CopyBtn(() => copyLottery(item))
+    CopyBtn(() => copyBtn(item))
   ]);
 };
 
@@ -53,7 +53,7 @@ const anchorLot = (_anchorLot?: TAnchorLot) => {
       h("span", { class: "lottery-right" }, anchorLotPic > 0 ? `共${anchorLotPic}电池` : "")
     ]),
     h("div", { class: "lottery-row lottery-min text-ellipsis" }, [
-      h("span", `${_anchorLot.award_num}人${anchorLotPic > 0 ? " x " + _anchorLot.award_per_capita + "份 " : " x 1份 "}`),
+      h("span", `${_anchorLot.award_num}人${anchorLotPic > 0 ? ` x ${_anchorLot.award_per_capita}份` : ""}`),
       ...getAnchorJoinCondition(_anchorLot),
     ]),
     h("div", { class: "lottery-row vertically-center" }, [
@@ -84,7 +84,7 @@ const redPocket = (uid: number, redPocketList?: TRedPocket[]) => {
 };
 
 const joinRequirementText = (rp: TRedPocket) => {
-  let result = JoinRequirementMap[rp.join_requirement];
+  let result = joinRequirementMap[rp.join_requirement];
 
   if (rp.receive_type === EReceiveType.SHARE_LIVE) {
     if (result) result += " & ";

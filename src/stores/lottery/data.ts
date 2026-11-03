@@ -1,3 +1,4 @@
+import type { TAnchorLot } from "@/types";
 import { EJoinRequirementOptions, ERedPocketType } from "./enums";
 
 export const redPocketType: Record<ERedPocketType, string> = {
@@ -9,11 +10,26 @@ export const redPocketType: Record<ERedPocketType, string> = {
   [ERedPocketType.BATTERY2]: "电池红包",
 };
 
-export const JoinRequirementMap = {
+export const joinRequirementMap = {
   [EJoinRequirementOptions.ALL]: "",
   [EJoinRequirementOptions.FOLLOW]: "关注",
   [EJoinRequirementOptions.FANCLUB]: "粉丝团",
   [EJoinRequirementOptions.GUARD]: "大航海"
+};
+
+export const anchorLotJoinCondition: Record<EJoinRequirementOptions, (at: TAnchorLot) => string> = {
+  [EJoinRequirementOptions.ALL]: () => {
+    return "";
+  },
+  [EJoinRequirementOptions.FOLLOW]: () => {
+    return "关注";
+  },
+  [EJoinRequirementOptions.FANCLUB]: (at) => {
+    return `粉丝牌[${at.require_value}级]`;
+  },
+  [EJoinRequirementOptions.GUARD]: (at) => {
+    return `大航海[${requireGuardValue[at.require_value]}]`;
+  }
 };
 
 export const giftList = Object.fromEntries([

@@ -1,4 +1,4 @@
-import { giftList, JoinRequirementMap, redPocketType } from "@/stores/lottery/data";
+import { anchorLotJoinCondition, giftList, joinRequirementMap, redPocketType } from "@/stores/lottery/data";
 import type { TAnchorLot, TLotteryInfo, TRedPocket } from "@/types";
 import { formatRemain } from "@/stores/lottery/format";
 import { getRedPocketTotal } from "@/stores";
@@ -28,10 +28,10 @@ export const copyLottery = async (lot: TLotteryInfo) => {
 
 export const formatAnchorLotText = (now: number, anchorLot?: TAnchorLot) => {
   if (!anchorLot) return "";
-  const anchorLotPrice = anchorLot.award_per_capita ? (giftList[anchorLot.award_name || ""]?.price || 0) / 100 : 0;
-  const anchorLotText = (anchorLotPrice ? `[天选] ${anchorLot.award_name} ${anchorLotPrice}电池` : `[无价值天选] ${anchorLot.award_name}`)
-    + `(${anchorLot.award_num}人${anchorLotPrice ? " * " + anchorLot.award_per_capita + "份)" : ")"}`
-    + `(${anchorLot.require_text})`
+  const anchorLotPrice = (giftList[anchorLot.award_name]?.price || 0) / 100 * anchorLot.award_per_capita;
+  const anchorLotText = (anchorLotPrice ? `[天选] ${anchorLot.award_name} 共${anchorLotPrice}电池` : `[无价值天选] ${anchorLot.award_name}`)
+    + ` ${anchorLot.award_num}人${anchorLotPrice ? " x " + anchorLot.award_per_capita + "份" : ""}`
+    + anchorLotConditionalText(anchorLot)
     + `\n剩余${formatRemain(now, anchorLot.end_time)}(${new Date(anchorLot.end_time * 1000).toLocaleTimeString()})`;
 
   return anchorLotText;
@@ -42,15 +42,24 @@ export const formatRedPocketListTextList = (now: number, uid: number, redPocketL
   return redPocketList.map(r => {
     const rpType = redPocketType[r.rp_type];
     return `[${rpType}] ${r.total_price / 100}电池 / ${getRedPocketTotal(r)}份`
-      + conditionalText(r.join_requirement, r.receive_type)
+      + redPocketConditionalText(r.join_requirement, r.receive_type)
       + `${r.senderUid === uid ? "\n主播自发红包" : ""}`
       + `\n剩余: ${formatRemain(now, r.end_time)}(${new Date(r.end_time * 1000).toLocaleTimeString()})`;
   });
 };
 
-const conditionalText = (join_requirement: EJoinRequirementOptions, receive_type: EReceiveType) => {
+const anchorLotConditionalText = (anchorLot: TAnchorLot) => {
+  const joinText = anchorLotJoinCondition[anchorLot.require_type](anchorLot);
+  const giftText = anchorLot.gift_name ? `投喂${anchorLot.gift_name}x${anchorLot.gift_num}(${anchorLot.gift_price / 100 * anchorLot.gift_num}电池)` : "";
+  let result = "";
+
+  if (joinText || giftText) result = `\n条件: ${joinText}${(!!joinText && !!giftText) ? " && " + giftText : giftText}`;
+  return result;
+};
+
+const redPocketConditionalText = (join_requirement: EJoinRequirementOptions, receive_type: EReceiveType) => {
   let text = "";
-  const joinReq = JoinRequirementMap[join_requirement];
+  const joinReq = joinRequirementMap[join_requirement];
 
   if (joinReq) text += `\n条件: ${joinReq}`;
   if (receive_type === EReceiveType.SHARE_LIVE) {

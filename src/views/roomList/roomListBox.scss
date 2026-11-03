@@ -6,24 +6,24 @@
   max-width: var(--max-width);
 }
 
-.lot-all > li {
+.lot-all > .room-item {
   height: 223px;
-  contain-intrinsic-size: auto 223px;
+  contain-intrinsic-height: auto 223px;
   @media (max-width: 483px) {
     height: auto;
     max-height: 278px;
-    contain-intrinsic-size: auto 278px;
+    contain-intrinsic-height: auto 278px;
   }
 }
 
-.lot-a > li {
+.lot-a > .room-item {
   height: 113px;
-  contain-intrinsic-size: auto 113px;
+  contain-intrinsic-height: auto 113px;
 }
 
-.lot-r > li {
+.lot-r > .room-item {
   height: 205px;
-  contain-intrinsic-size: auto 205px;
+  contain-intrinsic-height: auto 205px;
 }
 
 .room-item {
@@ -33,7 +33,6 @@
   overflow: hidden;
   box-sizing: border-box;
   content-visibility: auto;
-  contain: layout paint;
   background: var(--surface);
   border: 1px solid var(--room-border);
   border-radius: var(--radius-xl);
@@ -147,7 +146,6 @@
   scroll-snap-type: y mandatory;
   scrollbar-width: thin;
   margin-top: 5px;
-  overscroll-behavior: contain;
 
   > li {
     scroll-snap-align: start;
