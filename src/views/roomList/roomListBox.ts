@@ -34,7 +34,11 @@ const roomHeader = (item: TLotteryInfo) => {
     h("div", { class: "anchor-area" }, areaList.get(item.area_id)),
     h("a", {
       class: "anchor-name text-ellipsis",
-      onClick: () => navigateOpenLiveRoom(item.room_id, item.redPocketList, item.anchorLot)
+      href: `https://live.bilibili.com/${item.room_id}`,
+      onClick: (e: Event) => {
+        e.preventDefault();
+        navigateOpenLiveRoom(item.room_id, item.redPocketList, item.anchorLot);
+      }
     }, item.name),
     CopyBtn(() => copyBtn(item))
   ]);
