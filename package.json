@@ -1,0 +1,22 @@
+{
+  "name": "bilibili-live-lottery-web",
+  "module": "index.ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.8",
+    "tdesign-vue-next": "^1.20.7",
+    "typescript": "6",
+    "vite": "^8.2.2",
+    "vue": "^3.5.42"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.104.0",
+    "vue-tsc": "^3.3.14"
+  }
+}
