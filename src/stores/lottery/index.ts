@@ -112,7 +112,7 @@ const lotteryStore = () => {
 
   const processLottery = (items: TLotteryInfo | TLotteryInfo[]) => {
     const { show, lotteryFilterList } = settings.lotteryFilterOptions;
-    const isSingleItem = Array.isArray(items);
+    const isSingleItem = !Array.isArray(items);
     const list = Array.isArray(items) ? items : [items];
 
     list.forEach(lot => {
@@ -142,7 +142,7 @@ const lotteryStore = () => {
           }
         }
 
-        if (isSingleItem) return;
+        if (!isSingleItem) return;
         if (options.systemNotificationLottery && !notifyed) {
           let type = "";
           if (show.redPocket && mR) type = "redPocket";

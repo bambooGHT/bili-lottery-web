@@ -1,5 +1,5 @@
 import { h } from "vue";
-import { headerBox } from "./header/headerBox";
+import { headerBox } from "./header";
 import { roomListBox } from "./roomList/roomListBox";
 import { refreshLotteryBtn } from "./refresh";
 

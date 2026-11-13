@@ -1,16 +1,8 @@
-import type { TAnchorLot, TRedPocket } from "@/types";
+import type { TLotteryInfo } from "@/types";
 import { formatAnchorLotText, formatRedPocketListTextList } from "../lottery";
 
-export type TLotteryNotify = {
-  name: string;
-  uid: number;
-  room_id: number;
-  anchorLot: TAnchorLot;
-  redPocketList: TRedPocket[];
-};
-
 const notifyStore = () => {
-  const sendNotify = async (item: TLotteryNotify, type: string) => {
+  const sendNotify = async (item: TLotteryInfo, type: string) => {
     const registration = await navigator.serviceWorker.ready;
 
     const { name, uid, room_id, anchorLot, redPocketList } = item;

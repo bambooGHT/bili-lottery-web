@@ -1,5 +1,5 @@
 import { h } from "vue";
-import { CopyBtn } from "../icon";
+import { CopyBtn } from "../components/icon";
 import type { TAnchorLot, TLotteryInfo, TRedPocket } from "@/types";
 import { areaList, giftList, joinRequirementMap, redPocketType } from "@/stores/lottery/data";
 import { EReceiveType, ERedPocketType } from "@/stores/lottery/enums";
@@ -8,7 +8,7 @@ import { formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, 
 
 export const roomListBox = () => {
   const { displayLotteryArray } = useLotteryStore();
-  return h("ul", { class: `room-list ${getLotteryMinHeight()}` }, displayLotteryArray.value.map(item => roomItem(item)));
+  return h("ul", { class: `room-list ${getLotteryHeightStyle()}` }, displayLotteryArray.value.map(item => roomItem(item)));
 };
 
 const roomItem = (item: TLotteryInfo) => {
@@ -107,7 +107,7 @@ const redPocketTypeVNode: Record<ERedPocketType, ReturnType<typeof h>> = {
   [ERedPocketType.BATTERY2]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-value.08f243b..svg" }),
 };
 
-const getLotteryMinHeight = () => {
+const getLotteryHeightStyle = () => {
   const { lotteryFilterOptions } = useSettingsStore();
 
   const { anchorLot, redPocket } = lotteryFilterOptions.show;
@@ -116,5 +116,5 @@ const getLotteryMinHeight = () => {
   if (anchorLot) return "lot-a";
   if (redPocket) return "lot-r";
 
-  return 223;
+  return "lot-all";
 };

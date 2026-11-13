@@ -1,0 +1,54 @@
+label {
+  cursor: pointer;
+}
+
+.input-default {
+  padding: 2px 4px;
+  font: inherit;
+  font-size: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  outline: 0;
+
+  &:focus {
+    border-color: var(--brand);
+  }
+}
+
+.options-checkbox {
+  gap: 6px;
+}
+
+.options-text-box {
+  margin: 5px 0;
+  > div {
+    margin-right: auto;
+  }
+}
+
+.options-number {
+  width: 100px;
+}
+
+input[type="radio"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  cursor: pointer;
+
+  &:checked {
+    border-color: var(--brand);
+    background: var(--brand);
+    box-shadow: inset 0 0 0 3px var(--surface);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}

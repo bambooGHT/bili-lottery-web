@@ -1,6 +1,6 @@
 import { reactive, toRaw, watch } from "vue";
 import type { ILotteryFilterOptions, ISettings, ILotteryFilter } from "./types";
-import { ESort, ESortType, EAtteryValueFilterOperator } from "./enums";
+import { ESort, ESortType, EAtteryValueFilterOperator, ESortPartScope } from "./enums";
 
 const SETTINGS_KEY = 'settings';
 const FILTER_KEY = 'lottery_filter_options';
@@ -79,7 +79,8 @@ const settingsStore = () => {
     autoRefreshInterval: 20,
     sortType: ESortType.TIME,
     sort: ESort.ASC,
-    copyId: false
+    copyId: false,
+    sortPartScope: ESortPartScope.RED_POCKET
   }));
 
   const lotteryFilterOptions = reactive<ILotteryFilterOptions>(loadStorage(FILTER_KEY, {
