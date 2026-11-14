@@ -6,26 +6,6 @@
   max-width: var(--max-width);
 }
 
-.lot-all > .room-item {
-  height: 223px;
-  contain-intrinsic-height: auto 223px;
-  @media (max-width: 483px) {
-    height: auto;
-    max-height: 278px;
-    contain-intrinsic-height: auto 278px;
-  }
-}
-
-.lot-a > .room-item {
-  height: 113px;
-  contain-intrinsic-height: auto 113px;
-}
-
-.lot-r > .room-item {
-  height: 205px;
-  contain-intrinsic-height: auto 205px;
-}
-
 .room-item {
   display: flex;
   flex-direction: column;
@@ -48,6 +28,35 @@
       border-color: #d8dee9;
       box-shadow: 0 5px 16px rgb(30 40 60 / 8%);
     }
+  }
+}
+
+.lot-all > .room-item {
+  height: 223px;
+  contain-intrinsic-height: auto 223px;
+}
+
+.lot-a > .room-item {
+  height: 113px;
+  contain-intrinsic-height: auto 113px;
+}
+
+.lot-r > .room-item {
+  height: 205px;
+  contain-intrinsic-height: auto 205px;
+}
+
+@media (max-width: 483px) {
+  .lot-all > .room-item {
+    height: auto;
+    max-height: 238px;
+    contain-intrinsic-height: auto 238px;
+  }
+
+  .lot-r > .room-item {
+    height: auto;
+    max-height: 205px;
+    contain-intrinsic-height: auto 205px;
   }
 }
 
@@ -100,6 +109,7 @@
 .lottery {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1px;
   padding: 5px;
   color: var(--theme-text);
@@ -109,6 +119,8 @@
 
   &-row {
     min-width: 0;
+    position: relative;
+    z-index: 1;
   }
 
   &-row2 {
@@ -146,9 +158,17 @@
   scroll-snap-type: y mandatory;
   scrollbar-width: thin;
   margin-top: 5px;
-
   > li {
     scroll-snap-align: start;
+    position: relative;
+
+    img {
+      position: absolute;
+      height: 90%;
+      width: auto;
+      opacity: .25;
+      margin-left: 10px;
+    }
   }
   > li:nth-child(n+2) {
     margin-top: 5px;

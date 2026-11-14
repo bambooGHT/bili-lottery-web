@@ -1,4 +1,4 @@
-import type { ESortType, ESort, EAtteryValueFilterOperator, ESortPartScope } from "./enums";
+import type { ESortType, ESort, EAtteryValueFilterOperator, ESortPriority } from "./enums";
 
 export interface ISettings {
   verify: {
@@ -9,7 +9,7 @@ export interface ISettings {
   sortType: ESortType;
   sort: ESort;
   copyId: boolean;
-  sortPartScope: ESortPartScope;
+  sortPriority: ESortPriority;
 }
 
 export interface ILotteryFromAnchor {

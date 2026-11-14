@@ -13,8 +13,8 @@ export enum EAtteryValueFilterOperator {
   AND
 }
 
-export enum ESortPartScope {
-  ANCHOR_LOT = '天选',
-  RED_POCKET = '红包',
-  ALL = '天选跟红包'
+export enum ESortPriority {
+  ANCHOR_LOT,
+  RED_POCKET,
+  ALL
 }

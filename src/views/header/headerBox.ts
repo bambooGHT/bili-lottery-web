@@ -1,14 +1,16 @@
 import { ESort } from "@/stores/settings/enums";
 import { h } from "vue";
 import { sortOptions } from "./header";
-import { useSettingsStore } from "@/stores";
+import { useLotteryStore, useSettingsStore } from "@/stores";
 import { filterBox } from "./components/headerBox-filters";
 import { settingsBox } from "./components";
 
 export const headerBox = () => {
+  const { getLotterySize,displayLotteryList } = useLotteryStore();
   return h("header", { class: "header" }, [
     h("nav", { class: "header-toolbar" }, [
-      h("h1", { class: "header-logo" }, "✦ Lottery"),
+      h("h1", { class: "header-logo" }, `✦ Lottery`),
+      h("div", { class: "header-size" }, `ROOM [${displayLotteryList.value.length} / ${getLotterySize()}]`),
       sortBox(),
       h(filterBox),
       h(settingsBox),

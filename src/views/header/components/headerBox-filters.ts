@@ -41,7 +41,7 @@ export const filterBox = {
 const filterContent = {
   setup: () => {
     const { lotteryFilterOptions, addLotteryFilter, removeLotteryFilter } = useSettingsStore();
-    const { filterLotteryAll } = useLotteryStore();
+    const { refreshLotteryDisplayList } = useLotteryStore();
     const currentIndex = ref(0);
     const curLotteryFilterOptions = computed(() => {
       return lotteryFilterOptions.lotteryFilterList[currentIndex.value];
@@ -58,7 +58,7 @@ const filterContent = {
         modelValue: lotteryFilterOptions.show.anchorLot,
         "onUpdate:modelValue": (value: boolean) => {
           lotteryFilterOptions.show.anchorLot = value;
-          filterLotteryAll();
+          refreshLotteryDisplayList();
         },
       }),
       h(optionsCheckbox, {
@@ -66,7 +66,7 @@ const filterContent = {
         modelValue: lotteryFilterOptions.show.redPocket,
         "onUpdate:modelValue": (value: boolean) => {
           lotteryFilterOptions.show.redPocket = value;
-          filterLotteryAll();
+          refreshLotteryDisplayList();
         },
       }),
 
@@ -88,7 +88,7 @@ const filterContent = {
                   currentIndex.value - Number(index < currentIndex.value),
                   lotteryFilterOptions.lotteryFilterList.length - 1
                 );
-                filterLotteryAll();
+                refreshLotteryDisplayList();
               }
             }, "×")
           ]))),
@@ -107,7 +107,7 @@ const filterContent = {
         modelValue: curLotteryFilterOptions.value.enable,
         "onUpdate:modelValue": (value: boolean) => {
           curLotteryFilterOptions.value.enable = value;
-          filterLotteryAll();
+          refreshLotteryDisplayList();
         },
       }),
       h(optionsCheckbox, {
@@ -143,7 +143,7 @@ const filterContent = {
           placeholder: "≥ 电池",
           "onUpdate:modelValue": (value: number) => {
             curLotteryFilterOptions.value.batteryValue.gteValue = value;
-            filterLotteryAll();
+            refreshLotteryDisplayList();
           }
         }),
         h(optionsNumberBox, {
@@ -151,7 +151,7 @@ const filterContent = {
           placeholder: "≤ 电池",
           "onUpdate:modelValue": (value: number) => {
             curLotteryFilterOptions.value.batteryValue.lteValue = value;
-            filterLotteryAll();
+            refreshLotteryDisplayList();
           }
         }),
       ]),
@@ -162,7 +162,7 @@ const filterContent = {
           placeholder: "≥ 电池",
           "onUpdate:modelValue": (value: number) => {
             curLotteryFilterOptions.value.batteryValue.average = value;
-            filterLotteryAll();
+            refreshLotteryDisplayList();
           }
         }),
       ]),
@@ -176,7 +176,7 @@ const filterContent = {
             checked: curLotteryFilterOptions.value.batteryValueFilterOperator === EAtteryValueFilterOperator.OR,
             onChange: () => {
               curLotteryFilterOptions.value.batteryValueFilterOperator = EAtteryValueFilterOperator.OR;
-              filterLotteryAll();
+              refreshLotteryDisplayList();
             }
           }),
           "OR (||)"
@@ -189,7 +189,7 @@ const filterContent = {
             checked: curLotteryFilterOptions.value.batteryValueFilterOperator === EAtteryValueFilterOperator.AND,
             onChange: () => {
               curLotteryFilterOptions.value.batteryValueFilterOperator = EAtteryValueFilterOperator.AND;
-              filterLotteryAll();
+              refreshLotteryDisplayList();
             }
           }),
           "AND (&&)"
@@ -202,7 +202,7 @@ const filterContent = {
           placeholder: "≥ 电池",
           "onUpdate:modelValue": (value: number) => {
             curLotteryFilterOptions.value.batteryValue.anchorLotValue = value;
-            filterLotteryAll();
+            refreshLotteryDisplayList();
           }
         }),
       ]),
@@ -215,7 +215,7 @@ const filterContent = {
           modelValue: curLotteryFilterOptions.value.type[item.key],
           "onUpdate:modelValue": (value: boolean) => {
             curLotteryFilterOptions.value.type[item.key] = value;
-            filterLotteryAll();
+            refreshLotteryDisplayList();
           },
         }, {
           default: () => h("i", { style: `background: ${item.color2 ? `linear-gradient(135deg, ${item.color2} 0% 50%, ${item.color} 50% 100%)` : item.color};` })

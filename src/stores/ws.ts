@@ -4,7 +4,7 @@ import { useSettingsStore } from "./settings";
 import { api } from "@/api";
 
 const lotteryWs = () => {
-  const { setLotteryList, addLottery } = useLotteryStore();
+  const { replaceLotteryList, addLottery } = useLotteryStore();
   const { settings } = useSettingsStore();
 
   let closeWs = () => { };
@@ -22,7 +22,7 @@ const lotteryWs = () => {
 
     ws.onmessage = (event) => {
       const item: TLotteryInfo | TLotteryInfo[] = JSON.parse(event.data);
-      if (Array.isArray(item)) setLotteryList(item);
+      if (Array.isArray(item)) replaceLotteryList(item);
       else addLottery(item);
     };
 

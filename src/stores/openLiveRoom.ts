@@ -2,65 +2,24 @@ import type { TAnchorLot, TRedPocket } from "@/types";
 import { ref } from "vue";
 import { globalTicker } from "./ticker";
 
-const openLiveRoomManagerStore = () => {
-  const roomCache = new Map<number, {
-    anchorLotId?: number;
-    redPocketIdList: number[];
-    maxEndTime: number;
-  }>();
+const openLiveRoomStore = () => {
+  const openedRoomIds = ref(new Map<number, number>());
 
-  const openedRoomIds = ref(new Set<number>());
+  const openLiveRoom = (roomId: number, maxEndTime: number) => {
+    let v;
+    if (isMobile()) v = window.open(`bilibili://live/${roomId}`, "_self");
+    else v = window.open(`https://live.bilibili.com/${roomId}`, "_blank");
 
-  const autoOpenLiveRoom = (roomId: number, redPocketList?: TRedPocket[], anchorLot?: TAnchorLot) => {
-    if (!addRoom(roomId, redPocketList, anchorLot)) return;
-    openLiveRoom(roomId);
+    if (v) openedRoomIds.value.set(roomId, maxEndTime);
   };
 
-  const navigateOpenLiveRoom = (roomId: number, redPocketList?: TRedPocket[], anchorLot?: TAnchorLot) => {
-    addRoom(roomId, redPocketList, anchorLot);
-    openLiveRoom(roomId);
-  };
-
-  const openLiveRoom = (roomId: number) => {
-    if (isMobile()) window.open(`bilibili://live/${roomId}`, "_blank");
-    else window.open(`https://live.bilibili.com/${roomId}`, "_blank");
-  };
-
-  const deleteExpiredLiveRoom = (now: number) => {
+  const deleteOpenedRoomId = (now: number) => {
     now /= 1000;
-    for (const [roomId, item] of roomCache) {
-      if (now >= item.maxEndTime) {
-        roomCache.delete(roomId);
+    for (const [roomId, maxEndTime] of openedRoomIds.value) {
+      if (now >= maxEndTime) {
         openedRoomIds.value.delete(roomId);
       }
     }
-
-  };
-
-  const addRoom = (roomId: number, redPocketList?: TRedPocket[], anchorLot?: TAnchorLot) => {
-    const maxEndTime = Math.max(
-      anchorLot?.end_time ?? 0,
-      ...(redPocketList?.map(item => item.end_time) ?? [])
-    );
-    const newData = {
-      anchorLotId: anchorLot?.id,
-      redPocketIdList: (redPocketList ?? []).map(p => p.lot_id),
-      maxEndTime
-    };
-    const cachedData = roomCache.get(roomId);
-
-    if (cachedData) {
-      const anchorLotChanged = newData.anchorLotId && newData.anchorLotId !== cachedData.anchorLotId;
-      const cachedRedPocketIds = new Set(cachedData.redPocketIdList);
-      const hasNewRedPocket = newData.redPocketIdList.some(id => !cachedRedPocketIds.has(id));
-
-      if (!anchorLotChanged && !hasNewRedPocket) return false;
-    }
-
-    roomCache.set(roomId, newData);
-    openedRoomIds.value.add(roomId);
-
-    return true;
   };
 
   const isMobile = () => {
@@ -68,13 +27,12 @@ const openLiveRoomManagerStore = () => {
       || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   };
 
-  globalTicker.subscribe(deleteExpiredLiveRoom);
+  globalTicker.subscribe(deleteOpenedRoomId);
 
   return {
     openedRoomIds,
-    autoOpenLiveRoom,
-    navigateOpenLiveRoom
+    openLiveRoom
   };
 };
 
-export const openLiveRoomManager = openLiveRoomManagerStore();
+export const openLiveRoomManager = openLiveRoomStore();

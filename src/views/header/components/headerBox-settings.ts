@@ -4,6 +4,7 @@ import { h } from "vue";
 import { settingsIcon } from "@/views/components/icon";
 import { useLotteryStore, useSettingsStore } from "@/stores";
 import { optionsRadioBox, optionsTextBox, valueOnChange } from "@/views/components/input";
+import { ESortPriority } from "@/stores/settings/enums";
 
 export const settingsBox = {
   setup: () => {
@@ -111,6 +112,34 @@ const settingsContent = {
           settings.copyId = true;
         },
       }),
+
+      h("hr"),
+      h("h3", { class: "options-title" }, "排序优先级"),
+      h(optionsRadioBox, {
+        name: "sort priority",
+        label: "红包",
+        modelValue: settings.sortPriority === ESortPriority.RED_POCKET,
+        "onUpdate:modelValue": () => {
+          settings.sortPriority = ESortPriority.RED_POCKET;
+        },
+      }),
+      h(optionsRadioBox, {
+        name: "sort priority",
+        label: "天选",
+        modelValue: settings.sortPriority === ESortPriority.ANCHOR_LOT,
+        "onUpdate:modelValue": () => {
+          settings.sortPriority = ESortPriority.ANCHOR_LOT;
+        },
+      }),
+      h(optionsRadioBox, {
+        name: "sort priority",
+        label: "全部",
+        modelValue: settings.sortPriority === ESortPriority.ALL,
+        "onUpdate:modelValue": () => {
+          settings.sortPriority = ESortPriority.ALL;
+        },
+      }),
     ]);
+
   }
 };

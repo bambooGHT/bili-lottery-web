@@ -8,21 +8,34 @@ export const usePopup = () => {
   const toggle = () => {
     visible.value = !visible.value;
     document.body.classList.toggle("popup-wrapper", visible.value);
-
   };
 
-  const close = (e: Event) => {
-    if ((e.target as HTMLElement).nodeName !== "HTML") return;
-    toggle();
-    document.removeEventListener("pointerup", close);
+  let isOutside = false;
 
+  const handlePointerDown = (e: PointerEvent) => {
+    isOutside = (e.target as HTMLElement).nodeName === "HTML";
+  };
+
+  const close = (e: MouseEvent) => {
+    if (!isOutside || (e.target as HTMLElement).nodeName !== "HTML") return;
+
+    removeClose();
+    toggle();
+  };
+
+  const removeClose = () => {
+    document.removeEventListener("pointerdown", handlePointerDown);
+    document.removeEventListener("click", close, true);
   };
 
   const addClose = () => {
-    document.removeEventListener("pointerup", close);
-    if (visible.value) document.addEventListener("pointerup", close);
-  };
+    removeClose();
 
+    if (visible.value) {
+      document.addEventListener("pointerdown", handlePointerDown);
+      document.addEventListener("click", close, true);
+    }
+  };
 
   return { visible, toggle, addClose };
 };

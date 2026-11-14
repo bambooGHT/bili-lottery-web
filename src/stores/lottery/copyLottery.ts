@@ -16,9 +16,9 @@ export const copyLottery = async (lot: TLotteryInfo) => {
 
   const texts = [
     anchorLotText,
-    (redPocketList && anchorLotText) && "\r",
+    (redPocketListTextList?.length && anchorLotText) && "\r",
     redPocketListTextList.join("\n\n"),
-    (redPocketList || anchorLotText) && "\r",
+    (redPocketListTextList?.length || anchorLotText) && "\r",
     `${name}  ${room_id}`,
     `https://live.bilibili.com/${room_id}`
   ].filter(Boolean);

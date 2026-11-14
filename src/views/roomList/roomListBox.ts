@@ -2,13 +2,13 @@ import { h } from "vue";
 import { CopyBtn } from "../components/icon";
 import type { TAnchorLot, TLotteryInfo, TRedPocket } from "@/types";
 import { areaList, giftList, joinRequirementMap, redPocketType } from "@/stores/lottery/data";
-import { EReceiveType, ERedPocketType } from "@/stores/lottery/enums";
+import { EReceiveType } from "@/stores/lottery/enums";
 import { copyBtn, getAnchorJoinCondition, getRedPocketStyle } from "./roomList";
-import { formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, openLiveRoomManager } from "@/stores";
+import { formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, openLiveRoomManager, getMaxEndTime } from "@/stores";
 
 export const roomListBox = () => {
-  const { displayLotteryArray } = useLotteryStore();
-  return h("ul", { class: `room-list ${getLotteryHeightStyle()}` }, displayLotteryArray.value.map(item => roomItem(item)));
+  const { displayLotteryList } = useLotteryStore();
+  return h("ul", { class: `room-list ${getLotteryHeightStyle()}` }, displayLotteryList.value.map(item => roomItem(item)));
 };
 
 const roomItem = (item: TLotteryInfo) => {
@@ -23,12 +23,12 @@ const roomItem = (item: TLotteryInfo) => {
     [
       roomHeader(item),
       anchorLot(item.anchorLot),
-      redPocket(item.uid, item.redPocketList)
+      redPocket(item.uid, item.redPocketList),
     ]);
 };
 
 const roomHeader = (item: TLotteryInfo) => {
-  const { navigateOpenLiveRoom } = openLiveRoomManager;
+  const { openLiveRoom } = openLiveRoomManager;
 
   return h("div", { class: "anchor" }, [
     h("div", { class: "anchor-area" }, areaList.get(item.area_id)),
@@ -37,7 +37,7 @@ const roomHeader = (item: TLotteryInfo) => {
       href: `https://live.bilibili.com/${item.room_id}`,
       onClick: (e: Event) => {
         e.preventDefault();
-        navigateOpenLiveRoom(item.room_id, item.redPocketList, item.anchorLot);
+        openLiveRoom(item.room_id, getMaxEndTime(item));
       }
     }, item.name),
     CopyBtn(() => copyBtn(item))
@@ -69,10 +69,11 @@ const anchorLot = (_anchorLot?: TAnchorLot) => {
 
 const redPocket = (uid: number, redPocketList?: TRedPocket[]) => {
   const { lotteryFilterOptions } = useSettingsStore();
-  if (!lotteryFilterOptions.show.redPocket || !redPocketList) return null;
+  if (!lotteryFilterOptions.show.redPocket || !redPocketList?.length) return null;
 
   const list = redPocketList.map(item => {
     return h("li", { class: `lottery red-pocket-large ${getRedPocketStyle(item.total_price)} ${item.senderUid === uid ? "red-pocket-anchor" : ""}` }, [
+      // redPocketTypeVNode[item.rp_type](),
       h("div", { class: "lottery-row lottery-row2 vertically-center" }, [
         h("span", { class: "lottery-title" }, redPocketType[item.rp_type]),
         h("span", { class: "lottery-title" }, `${item.total_price ? `${item.total_price / 100}电池` : "1~100"} / ${getRedPocketTotal(item)}份`),
@@ -81,7 +82,7 @@ const redPocket = (uid: number, redPocketList?: TRedPocket[]) => {
       h("div", { class: "lottery-row lottery-row2 vertically-center" }, [
         h("span", { class: "text-ellipsis lottery-min" }, item.sender_name),
         h("span", { class: "lottery-right" }, `${item.showTime}[${item.showEndTime}]`)
-      ])
+      ]),
     ]);
   });
   return h("ul", { class: "red-pocket-list" }, list);
@@ -98,14 +99,14 @@ const joinRequirementText = (rp: TRedPocket) => {
   return result;
 };
 
-const redPocketTypeVNode: Record<ERedPocketType, ReturnType<typeof h>> = {
-  [ERedPocketType.NULL]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-red-packet.0a7930e..svg" }),
-  [ERedPocketType.GIFT]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-red-packet.0a7930e..svg" }),
-  [ERedPocketType.CAPTAIN]: h("img", { src: "https://i0.hdslb.com/bfs/live/ec669df60a1c4068676f5e31da6ed08993f9436d.png" }),
-  [ERedPocketType.BATTERY]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-value.08f243b..svg" }),
-  [ERedPocketType.INTIMACY]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/intimacy.ab56e9e..png" }),
-  [ERedPocketType.BATTERY2]: h("img", { src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-value.08f243b..svg" }),
-};
+// const redPocketTypeVNode: Record<ERedPocketType, () => ReturnType<typeof h>> = {
+//   [ERedPocketType.NULL]: () => h("img", { crossorigin: "anonymous", src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-red-packet.0a7930e..svg" }),
+//   [ERedPocketType.GIFT]: () => h("img", { crossorigin: "anonymous", src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-red-packet.0a7930e..svg" }),
+//   [ERedPocketType.CAPTAIN]: () => h("img", { crossorigin: "anonymous", src: "https://i0.hdslb.com/bfs/live/ec669df60a1c4068676f5e31da6ed08993f9436d.png" }),
+//   [ERedPocketType.BATTERY]: () => h("img", { crossorigin: "anonymous", src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-value.08f243b..svg" }),
+//   [ERedPocketType.INTIMACY]: () => h("img", { crossorigin: "anonymous", src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/intimacy.ab56e9e..png" }),
+//   [ERedPocketType.BATTERY2]: () => h("img", { crossorigin: "anonymous", src: "https://i1.hdslb.com/bfs/static/blive/blfe-live-room/static/img/battery-value.08f243b..svg" }),
+// };
 
 const getLotteryHeightStyle = () => {
   const { lotteryFilterOptions } = useSettingsStore();
