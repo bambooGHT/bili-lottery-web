@@ -121,6 +121,7 @@ export const useLotteryData = () => {
     for (const lot of list) {
       let added = false;
       let notified = false;
+      let opened = false;
 
       const is = lotteryIdDeduplication.addLotteryData(lot);
       for (const lotteryFilter of lotteryFilterList) {
@@ -131,8 +132,9 @@ export const useLotteryData = () => {
           if (added) break;
           continue;
         }
+        
         if (!notified && lotteryFilter.systemNotificationLottery && is) notified = sendLotteryNotification(lot, result);
-        if (lotteryFilter.autoOpenLiveRoom && is) autoOpenLotteryRoom(lot, result);
+        if (!opened && lotteryFilter.autoOpenLiveRoom && is) opened = autoOpenLotteryRoom(lot, result);
       }
     }
   };
@@ -196,7 +198,10 @@ export const useLotteryData = () => {
 
     if (mR || mA) {
       openLiveRoomManager.openLiveRoom(lot.room_id, getMaxEndTime(lot));
+      return true;
     }
+
+    return false;
   };
 
   const updateShowTime = (lottery: TLotteryInfo, now: number) => {

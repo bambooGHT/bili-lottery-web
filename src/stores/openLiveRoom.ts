@@ -9,7 +9,7 @@ const openLiveRoomStore = () => {
     let v;
     if (isMobile()) v = window.open(`bilibili://live/${roomId}`, "_self");
     else v = window.open(`https://live.bilibili.com/${roomId}`, "_blank");
-
+    
     if (v) openedRoomIds.value.set(roomId, maxEndTime);
   };
 
