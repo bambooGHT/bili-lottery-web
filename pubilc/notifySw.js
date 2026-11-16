@@ -1,11 +1,20 @@
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
-  const { roomId } = event.notification.data ?? {};
+  const data = event.notification.data;
+  console.log(data);
 
-  if (event.action === "open" && roomId) {
+  if (event.action === "open" && data) {
     event.waitUntil(
-      self.clients.openWindow(`https://live.bilibili.com/${roomId}`)
+      (async () => {
+        const clients = await self.clients.matchAll({
+          type: "window",
+        });
+
+        const client = clients[0];
+
+        client.postMessage(data);
+      })()
     );
   }
 });

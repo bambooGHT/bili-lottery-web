@@ -1,5 +1,5 @@
 import type { TLotteryInfo } from "@/types";
-import { globalTicker } from "../ticker";
+import { globalTicker } from "./ticker";
 
 export const getMaxEndTime = (lot: TLotteryInfo) => {
   return Math.max(
@@ -8,7 +8,7 @@ export const getMaxEndTime = (lot: TLotteryInfo) => {
   );
 };
 
-export const useLotteryIdDeduplication = () => {
+ const lotteryIdDeduplicationStore = () => {
   const roomCache = new Map<number, {
     anchorLotId?: number;
     redPocketIdList: number[];
@@ -51,3 +51,5 @@ export const useLotteryIdDeduplication = () => {
 
   return { addLotteryData };
 };
+
+export const lotteryIdDeduplication = lotteryIdDeduplicationStore();

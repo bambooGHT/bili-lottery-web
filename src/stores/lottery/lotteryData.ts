@@ -8,7 +8,7 @@ import { openLiveRoomManager } from "../openLiveRoom";
 import { ESort, ESortPriority, ESortType } from "../settings/enums";
 import { giftList } from "./data";
 import { formatRemain } from "./format";
-import { getMaxEndTime, useLotteryIdDeduplication } from "./lotteryIdDeduplication";
+import { getMaxEndTime, lotteryIdDeduplication } from "../lotteryIdDeduplication";
 
 const isIterable = (value: unknown): value is Iterable<unknown> => {
   return value != null && typeof (value as { [Symbol.iterator]?: unknown; })[Symbol.iterator] === 'function';
@@ -18,7 +18,6 @@ export const useLotteryData = () => {
   const lotteryMap = ref(new Map<number, TLotteryInfo>());
   const lotteryDisplayMap = ref(new Map<number, TLotteryInfo>());
 
-  const lotteryIdDeduplication = useLotteryIdDeduplication();
   const settings = useSettingsStore();
 
   const displayLotteryList = computed(() => {
@@ -127,7 +126,7 @@ export const useLotteryData = () => {
       for (const lotteryFilter of lotteryFilterList) {
         const result = evaluateLotteryFilter(lot, lotteryFilter);
 
-        added ||= addLotteryDisplay(lot, result);
+        if (!added && lotteryFilter.enable) added = addLotteryDisplay(lot, result);
         if (!isSingleItem) {
           if (added) break;
           continue;
@@ -149,7 +148,6 @@ export const useLotteryData = () => {
 
     const mR = hvR && redPocketPass;
     const mA = hvA && anchorPass;
-
 
     return {
       redPocketList,

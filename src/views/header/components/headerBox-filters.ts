@@ -9,6 +9,13 @@ import { EAtteryValueFilterOperator } from "@/stores/settings/enums";
 export const filterBox = {
   setup: () => {
     const { visible, toggle, addClose } = usePopup();
+    const { lotteryFilterOptions } = useSettingsStore();
+    
+    if (lotteryFilterOptions.lotteryFilterList.some(p => p.systemNotificationLottery)) {
+      notify.requestNotifyPermission();
+      notify.registerServiceWorker();
+    }
+
     return () => h(Popup, {
       visible: visible.value,
       placement: "bottom-right",
@@ -46,10 +53,6 @@ const filterContent = {
     const curLotteryFilterOptions = computed(() => {
       return lotteryFilterOptions.lotteryFilterList[currentIndex.value];
     });
-
-    if (lotteryFilterOptions.lotteryFilterList.some(p => p.systemNotificationLottery)) {
-      notify.requestNotifyPermission();
-    }
 
     return () => h("section", { class: "popup-content options-content" }, [
       h("h3", { class: "options-title" }, "显示"),
@@ -115,7 +118,10 @@ const filterContent = {
         modelValue: curLotteryFilterOptions.value.systemNotificationLottery,
         "onUpdate:modelValue": (value: boolean) => {
           curLotteryFilterOptions.value.systemNotificationLottery = value;
-          if (value) notify.requestNotifyPermission();
+          if (value) {
+            notify.requestNotifyPermission();
+            notify.registerServiceWorker();
+          }
         },
       }),
       h(optionsCheckbox, {

@@ -7,7 +7,7 @@ import { globalTicker } from "../ticker";
 import { useLotteryData } from "./lotteryData";
 
 export * from "./copyLottery";
-export { getMaxEndTime } from "./lotteryIdDeduplication";
+export { getMaxEndTime } from "../lotteryIdDeduplication";
 
 const lotteryStore = () => {
   let autoRefreshTicker: Ticker | null = null;

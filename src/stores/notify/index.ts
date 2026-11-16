@@ -1,7 +1,11 @@
 import type { TLotteryInfo } from "@/types";
-import { formatAnchorLotText, formatRedPocketListTextList } from "../lottery";
+import { formatAnchorLotText, formatRedPocketListTextList, getMaxEndTime } from "../lottery";
+import { openLiveRoomManager } from "../openLiveRoom";
+import { lotteryIdDeduplication } from "../lotteryIdDeduplication";
 
 const notifyStore = () => {
+  let messageHandler: ((event: MessageEvent) => void) | null = null;
+
   const sendNotify = async (item: TLotteryInfo, type: string) => {
     const registration = await navigator.serviceWorker.ready;
 
@@ -20,30 +24,19 @@ const notifyStore = () => {
 
     await registration.showNotification(`[${title}]  ${name}`, {
       body,
+      data: item,
       tag: `room-${room_id}`,
       lang: "zh-CN",
       requireInteraction: false,
       renotify: true,
       silent: false,
       vibrate: [200, 100, 200],
-      data: { roomId: room_id },
       actions: [
         { action: "open", title: "打开直播间" },
         { action: "ignore", title: "忽略" },
       ],
     });
   };
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-      try {
-        const registration = await navigator.serviceWorker.register('/notifySw.js');
-        console.log('Service Worker注册成功:', registration.scope);
-      } catch (err) {
-        console.error('Service Worker注册失败:', err);
-      }
-    });
-  }
 
   const requestNotifyPermission = async (): Promise<boolean> => {
     if (!("serviceWorker" in navigator) || !("Notification" in window)) {
@@ -56,9 +49,42 @@ const notifyStore = () => {
     return (await Notification.requestPermission()) === "granted";
   };
 
+  const registerServiceWorker = async (): Promise<boolean> => {
+    if (!("serviceWorker" in navigator)) return false;
+
+    try {
+      let registration = await navigator.serviceWorker.getRegistration("/");
+      if (!registration) registration = await navigator.serviceWorker.register("/notifySw.js");
+
+      await navigator.serviceWorker.ready;
+      registerMessageListener();
+
+      console.log("Service Worker 注册成功:", registration.scope);
+      return true;
+    } catch (err) {
+      console.error("Service Worker 注册失败:", err);
+      return false;
+    }
+  };
+
+  const registerMessageListener = () => {
+    if (messageHandler) return;
+
+    messageHandler = (event: MessageEvent<TLotteryInfo>) => {
+      const lot = event.data;
+      if (!lot?.room_id) return;
+
+      lotteryIdDeduplication.addLotteryData(lot);
+      openLiveRoomManager.openLiveRoom(lot.room_id, getMaxEndTime(lot));
+    };
+
+    navigator.serviceWorker.addEventListener("message", messageHandler);
+  };
+
   return {
     sendNotify,
-    requestNotifyPermission
+    requestNotifyPermission,
+    registerServiceWorker
   };
 };
 

@@ -5,6 +5,7 @@ import { areaList, giftList, joinRequirementMap, redPocketType } from "@/stores/
 import { EReceiveType } from "@/stores/lottery/enums";
 import { copyBtn, getAnchorJoinCondition, getRedPocketStyle } from "./roomList";
 import { formatJoinTotal, getRedPocketTotal, useLotteryStore, useSettingsStore, openLiveRoomManager, getMaxEndTime } from "@/stores";
+import { lotteryIdDeduplication } from "@/stores/lotteryIdDeduplication";
 
 export const roomListBox = () => {
   const { displayLotteryList } = useLotteryStore();
@@ -37,7 +38,9 @@ const roomHeader = (item: TLotteryInfo) => {
       href: `https://live.bilibili.com/${item.room_id}`,
       onClick: (e: Event) => {
         e.preventDefault();
-        openLiveRoom(item.room_id, getMaxEndTime(item));
+
+        lotteryIdDeduplication.addLotteryData(item);
+        openLiveRoomManager.openLiveRoom(item.room_id, getMaxEndTime(item));
       }
     }, item.name),
     CopyBtn(() => copyBtn(item))

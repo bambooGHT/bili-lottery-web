@@ -2,8 +2,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 4px;
-  margin: 8px auto 40px;
+  margin: 6px auto 42px;
   max-width: var(--max-width);
+  padding: 0 6px;
+  @media (max-width: 551px) {
+    padding: 0 4px;
+  }
+
 }
 
 .room-item {
@@ -46,7 +51,7 @@
   contain-intrinsic-height: auto 205px;
 }
 
-@media (max-width: 483px) {
+@media (max-width: 510px) {
   .lot-all > .room-item {
     height: auto;
     max-height: 238px;

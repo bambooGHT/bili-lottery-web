@@ -14,7 +14,7 @@ body.popup-wrapper {
   position: sticky;
   top: 0;
   z-index: 20;
-  padding: 0 8px;
+  padding: 0 6px;
   background: rgb(247 249 252 / 60%);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(3px);
@@ -40,7 +40,7 @@ body.popup-wrapper {
 .header-size {
   margin-right: auto;
   padding: 5px 6px;
-  border-bottom: 2px solid rgba(69, 138, 242, 0.5);
+  border-bottom: 2px solid rgba(69, 138, 242, .8);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   color: #458bf2;
@@ -103,7 +103,7 @@ body.popup-wrapper {
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 551px) {
   .header {
     padding: 2px 4px;
 
