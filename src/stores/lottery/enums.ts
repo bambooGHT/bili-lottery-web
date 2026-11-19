@@ -2,7 +2,8 @@ export enum EJoinRequirementOptions {
   ALL,
   FOLLOW,
   FANCLUB,
-  GUARD
+  GUARD,
+  POPULARITY_TICKET
 }
 
 export enum EReceiveType {

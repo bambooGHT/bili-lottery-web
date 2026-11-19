@@ -10,11 +10,12 @@ export const redPocketType: Record<ERedPocketType, string> = {
   [ERedPocketType.BATTERY2]: "电池红包",
 };
 
-export const joinRequirementMap = {
+export const joinRequirementMap: Record<EJoinRequirementOptions, string> = {
   [EJoinRequirementOptions.ALL]: "",
   [EJoinRequirementOptions.FOLLOW]: "关注",
   [EJoinRequirementOptions.FANCLUB]: "粉丝团",
-  [EJoinRequirementOptions.GUARD]: "大航海"
+  [EJoinRequirementOptions.GUARD]: "大航海",
+  [EJoinRequirementOptions.POPULARITY_TICKET]: "人气票",
 };
 
 export const anchorLotJoinCondition: Record<EJoinRequirementOptions, (at: TAnchorLot) => string> = {
@@ -29,6 +30,9 @@ export const anchorLotJoinCondition: Record<EJoinRequirementOptions, (at: TAncho
   },
   [EJoinRequirementOptions.GUARD]: (at) => {
     return `大航海[${requireGuardValue[at.require_value]}]`;
+  },
+  [EJoinRequirementOptions.POPULARITY_TICKET]: (at) => {
+    return `人气票`;
   }
 };
 
